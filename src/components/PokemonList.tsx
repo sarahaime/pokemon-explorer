@@ -4,6 +4,7 @@ import { pokemonApiService } from '../services/pokemonApiService';
 import { PokemonCard } from './PokemonCard';
 import { Pokemon, PokemonListItem } from '../types/pokemon';
 import { PokemonLoadingCard } from './PokemonLoadingCard';
+import { QUERY_KEYS } from '../constants/queryKeys';
 
 interface PokemonListProps {
     onPokemonClick: (pokemon: Pokemon) => void;
@@ -16,7 +17,7 @@ export const PokemonList = ({ onPokemonClick }: PokemonListProps) => {
         hasNextPage,
         isFetchingNextPage,
         } = useInfiniteQuery({
-        queryKey: ['pokemon-list'],
+        queryKey: QUERY_KEYS.POKEMON_LIST,
         queryFn: ({ pageParam = 0 }) => pokemonApiService.getPokemons(pageParam, 20),
         getNextPageParam: (lastPage) => {
             if (lastPage.next) {

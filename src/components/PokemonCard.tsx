@@ -4,6 +4,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { PokemonLoadingCard } from './PokemonLoadingCard';
 import { HeartIcon } from './icons';
 import { getTypeStyle } from '../utils/getTypeStyle';
+import { QUERY_KEYS } from '../constants/queryKeys';
 
 interface PokemonCardProps {
   pokemonName: string;
@@ -14,7 +15,7 @@ export const PokemonCard = ({ pokemonName, onClick }: PokemonCardProps) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   
   const { data: pokemon, isLoading } = useQuery({
-    queryKey: ['pokemon', pokemonName],
+    queryKey: QUERY_KEYS.POKEMON(pokemonName),
     queryFn: () => pokemonApiService.getPokemonByName(pokemonName),
   });
 

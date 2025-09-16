@@ -5,6 +5,7 @@ import { pokemonApiService } from "../services/pokemonApiService";
 import { getTypeStyleByPokemon } from "../utils/getTypeStyle";
 import { useFavorites } from "../hooks/useFavorites";
 import { HeartIcon, BackIcon } from "../components/icons";
+import { QUERY_KEYS } from "../constants/queryKeys";
 
 export const PokemonDetailPage = () => {
     const { name } = useParams();
@@ -25,7 +26,7 @@ export const PokemonDetailPage = () => {
     };
 
     const { data: pokemon } = useQuery({
-        queryKey: ['pokemon', name],
+        queryKey: QUERY_KEYS.POKEMON(name ?? ''),
         queryFn: () => pokemonApiService.getPokemonByName(name ?? ''),
     });
 
