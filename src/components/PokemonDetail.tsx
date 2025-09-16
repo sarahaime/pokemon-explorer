@@ -1,6 +1,7 @@
 import { Pokemon } from '../types/pokemon';
 import { useFavorites } from '../hooks/useFavorites';
 import { HeartIcon } from './icons';
+import { getTypeStyle } from '../utils/getTypeStyle';
 
 interface PokemonDetailProps {
   pokemon: Pokemon;
@@ -57,14 +58,18 @@ export const PokemonDetail = ({ pokemon }: PokemonDetailProps) => {
           <div className="mb-6">
             <h3 className="text-xl font-bold mb-2">Types</h3>
             <div className="flex gap-2">
-              {pokemon.types.map((type, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-gray-200 rounded-full text-sm capitalize"
-                >
-                  {type.type.name}
-                </span>
-              ))}
+              {pokemon.types.map((type, index) => {
+                const typeStyle = getTypeStyle(type.type.name as any);
+                return (
+                  <span
+                    key={index}
+                    className={`px-3 py-1 rounded-full text-sm capitalize font-medium ${typeStyle.textColorClass}`}
+                    style={{ backgroundColor: typeStyle.backgroundColor }}
+                  >
+                    {type.type.name}
+                  </span>
+                );
+              })}
             </div>
           </div>
 
