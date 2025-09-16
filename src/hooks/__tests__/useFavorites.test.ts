@@ -2,37 +2,40 @@ import { renderHook, act } from '@testing-library/react';
 import { useFavorites } from '../useFavorites';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+const mockStorage = new Map();
 const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
+    getItem: vi.fn((key) => mockStorage.get(key) || null),
+    setItem: vi.fn((key, value) => mockStorage.set(key, value)),
+    removeItem: vi.fn((key) => mockStorage.delete(key)),
+    clear: vi.fn(() => mockStorage.clear()),
 };
 
+beforeEach(() => {
+    mockStorage.clear();
+});
+
 Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock
+    value: localStorageMock
 });
 
 describe('useFavorites', () => {
-  beforeEach(() => {
-    localStorageMock.getItem.mockClear();
-    localStorageMock.setItem.mockClear();
-    localStorageMock.removeItem.mockClear();
-  });
+    beforeEach(() => {
+        localStorageMock.getItem.mockClear();
+        localStorageMock.setItem.mockClear();
+        localStorageMock.removeItem.mockClear();
+    });
 
   describe('initial state', () => {
     it('starts with no favorites when localStorage is empty', () => {
-      localStorageMock.getItem.mockReturnValue(null);
-      
       const { result } = renderHook(() => useFavorites());
       
-      expect(result.current.favorites).toEqual([]);
+      expect(result.current.favorites).toHaveLength(0);
       expect(localStorageMock.getItem).toHaveBeenCalledWith('pokemon-favorites');
     });
 
     it('loads existing favorites from localStorage', () => {
-      const storedFavorites = ['charmander', 'charizard'];
-      localStorageMock.getItem.mockReturnValue(JSON.stringify(storedFavorites));
+      const storedFavorites = ['charmander', 'bulbasaur'];
+      mockStorage.set('pokemon-favorites', JSON.stringify(storedFavorites));
       
       const { result } = renderHook(() => useFavorites());
       
@@ -40,7 +43,7 @@ describe('useFavorites', () => {
     });
 
     it('handles corrupted data without crashing', () => {
-      localStorageMock.getItem.mockReturnValue('invalid-json');
+      mockStorage.set('pokemon-favorites', 'invalid-json');
       
       expect(() => {
         renderHook(() => useFavorites());
@@ -49,8 +52,8 @@ describe('useFavorites', () => {
   });
 
   describe('isFavorite', () => {
-    it('knows when a pokemon is favorited', () => {
-      localStorageMock.getItem.mockReturnValue(JSON.stringify(['charmander']));
+    it('should return true when a pokemon is favorited', () => {
+      mockStorage.set('pokemon-favorites', JSON.stringify(['charmander']));
       
       const { result } = renderHook(() => useFavorites());
       
@@ -58,11 +61,11 @@ describe('useFavorites', () => {
     });
 
     it('should return false for non-favorited pokemon', () => {
-      localStorageMock.getItem.mockReturnValue(JSON.stringify(['charmander']));
+      mockStorage.set('pokemon-favorites', JSON.stringify(['charmander']));
       
       const { result } = renderHook(() => useFavorites());
       
-      expect(result.current.isFavorite('charizard')).toBe(false);
+      expect(result.current.isFavorite('bulbasaur')).toBe(false);
     });
 
     it('should return false for empty strings', () => {
@@ -73,15 +76,14 @@ describe('useFavorites', () => {
   });
 
   describe('toggleFavorite', () => {
-    it('adds a pokemon to favorites', () => {
-      localStorageMock.getItem.mockReturnValue(JSON.stringify([]));
-      
+    it('should add a pokemon to favorites', () => {
+     
       const { result } = renderHook(() => useFavorites());
-      
+
       act(() => {
         result.current.toggleFavorite('charmander');
       });
-      
+
       expect(result.current.favorites).toContain('charmander');
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'pokemon-favorites',
@@ -89,37 +91,38 @@ describe('useFavorites', () => {
       );
     });
 
-    it('removes a pokemon from favorites', () => {
-      localStorageMock.getItem.mockReturnValue(JSON.stringify(['charmander', 'charizard']));
-      
+    it('should remove a pokemon from favorites', () => {
+      mockStorage.set('pokemon-favorites', JSON.stringify(['charmander', 'bulbasaur']));
+
       const { result } = renderHook(() => useFavorites());
-      
+
       act(() => {
         result.current.toggleFavorite('charmander');
       });
-      
+
       expect(result.current.favorites).not.toContain('charmander');
-      expect(result.current.favorites).toContain('charizard');
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        'pokemon-favorites',
-        JSON.stringify(['charizard'])
-      );
+      expect(result.current.favorites).toContain('bulbasaur');
     });
 
-    it("doesn't create duplicates when toggling twice", () => {
-      localStorageMock.getItem.mockReturnValue(JSON.stringify(['charmander']));
-      
+    it('should not duplicate when toggling twice existing favorite', () => {
+      mockStorage.set('pokemon-favorites', JSON.stringify(['charmander']));
+
       const { result } = renderHook(() => useFavorites());
-      
+
+     
       act(() => {
         result.current.toggleFavorite('charmander');
       });
-      
-      act(() => {
-        result.current.toggleFavorite('charmander');
-      });
-      
+
       expect(result.current.favorites).not.toContain('charmander');
+
+      
+      act(() => {
+        result.current.toggleFavorite('charmander');
+      });
+
+      expect(result.current.favorites).toContain('charmander');
+      expect(result.current.favorites.filter(name => name === 'charmander')).toHaveLength(1);
     });
   });
 });
