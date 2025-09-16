@@ -15,7 +15,7 @@ export const PokemonCard = ({ pokemonName, onClick }: PokemonCardProps) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   
   const { data: pokemon, isLoading } = useQuery({
-    queryKey: QUERY_KEYS.POKEMON(pokemonName),
+    queryKey: QUERY_KEYS.POKEMON_DETAIL(pokemonName),
     queryFn: () => pokemonApiService.getPokemonByName(pokemonName),
   });
 

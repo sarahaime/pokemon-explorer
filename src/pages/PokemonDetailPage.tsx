@@ -28,7 +28,7 @@ export const PokemonDetailPage = () => {
     };
 
     const { data: pokemon, isLoading } = useQuery({
-        queryKey: QUERY_KEYS.POKEMON(name ?? ''),
+        queryKey: QUERY_KEYS.POKEMON_DETAIL(name ?? ''),
         queryFn: () => pokemonApiService.getPokemonByName(name ?? ''),
     });
 
