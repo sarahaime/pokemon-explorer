@@ -3,7 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { pokemonApiService } from '../services/pokemonApiService';
 import { PokemonCard } from './PokemonCard';
 import { PokemonListItem } from '../types/pokemon';
-import { PokemonLoadingCard } from './PokemonLoadingCard';
+import { PokemonCardLoading } from './PokemonCardLoading';
 import { QUERY_KEYS } from '../constants/queryKeys';
 
 interface PokemonListProps {
@@ -46,7 +46,7 @@ export const PokemonList = ({ onPokemonClick }: PokemonListProps) => {
             <div className="h-full overflow-y-auto mx-auto md:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
                     {[...Array(8)].map((_, index) => (
-                        <PokemonLoadingCard key={index} />
+                        <PokemonCardLoading key={index} />
                     ))}
                 </div>
             </div>
@@ -69,7 +69,7 @@ export const PokemonList = ({ onPokemonClick }: PokemonListProps) => {
             </div>
             {isFetchingNextPage && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-                    <PokemonLoadingCard /><PokemonLoadingCard /><PokemonLoadingCard />
+                    <PokemonCardLoading /><PokemonCardLoading /><PokemonCardLoading />
                 </div>
             )}
         </div>

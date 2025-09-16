@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { pokemonApiService } from '../services/pokemonApiService';
 import { useFavorites } from '../hooks/useFavorites';
-import { PokemonLoadingCard } from './PokemonLoadingCard';
+import { PokemonCardLoading } from './PokemonCardLoading';
 import { HeartIcon } from './icons';
 import { getTypeStyle } from '../utils/getTypeStyle';
 import { QUERY_KEYS } from '../constants/queryKeys';
@@ -26,7 +26,7 @@ export const PokemonCard = ({ pokemonName, onClick }: PokemonCardProps) => {
   };
 
   if (isLoading) {
-    return (<PokemonLoadingCard />);
+    return (<PokemonCardLoading />);
   }
 
   if (!pokemon) {

@@ -21,9 +21,12 @@ export const useFavorites = () => {
     };
 
     const addFavorite = (pokemonName: string) => {
-        const newFavorites = [...getFavorites(), pokemonName];
-        localStorage.setItem(FAVORITES_KEY, JSON.stringify(newFavorites));
-        setFavorites(newFavorites);
+        const currentFavorites = getFavorites();
+        if (!currentFavorites.includes(pokemonName)) {
+            const newFavorites = [...currentFavorites, pokemonName];
+            localStorage.setItem(FAVORITES_KEY, JSON.stringify(newFavorites));
+            setFavorites(newFavorites);
+        }
     };
 
     const removeFavorite = (pokemonName: string) => {
@@ -36,7 +39,13 @@ export const useFavorites = () => {
     const getFavorites = () => {
         const stored = localStorage.getItem(FAVORITES_KEY);
         if (stored) {
-            return JSON.parse(stored);
+            try {
+                return JSON.parse(stored);
+            } catch (error) {
+                console.warn('Invalid JSON in localStorage, resetting favorites');
+                localStorage.removeItem(FAVORITES_KEY);
+                return [];
+            }
         }
         return [];
     };

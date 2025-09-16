@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { PokeballIcon, HeartIcon } from './icons';
+import { PokeballIcon, HeartIcon } from '../components/icons';
 
 export const TopBar = () => {
   const location = useLocation();

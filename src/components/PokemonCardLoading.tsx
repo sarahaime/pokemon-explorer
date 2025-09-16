@@ -1,6 +1,6 @@
 import { LOADING_STYLES } from '../constants/loadingStyles';
 
-export const PokemonLoadingCard = () => {
+export const PokemonCardLoading = () => {
   return (
     <div className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-md border border-gray-200/50 p-6 ${LOADING_STYLES.pulse}`}>
       <div className={`h-36 ${LOADING_STYLES.skeletonBg} rounded-xl mb-4`}></div>

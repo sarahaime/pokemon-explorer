@@ -12,7 +12,7 @@ A React application for browsing and exploring Pokémon using the PokéAPI. Buil
 ## Tech Stack
 
 - React 18 + TypeScript
-- Vite
+- Vite + Vitest
 - Tailwind CSS
 - React Query (TanStack Query)
 - React Router
@@ -30,6 +30,9 @@ npm install
 
 # Start development server
 npm run dev
+
+# Run tests
+npm test
 
 # Build for production
 npm run build
