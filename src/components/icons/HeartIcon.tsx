@@ -2,8 +2,9 @@ interface HeartIconProps {
   width?: number;
   height?: number;
   className?: string;
-  stroke?: string;
+  fillColor?: string;
   strokeWidth?: number;
+  strokeColor?: string;
   filled?: boolean;
 }
 
@@ -11,8 +12,9 @@ export const HeartIcon = ({
   width = 28, 
   height = 28, 
   className = "", 
-  stroke = "white",
-  strokeWidth = 2.5,
+  fillColor = "#ef4444",
+  strokeWidth = 2,
+  strokeColor = "#EFEFEF",
   filled = false
 }: HeartIconProps) => {
   return (
@@ -26,11 +28,11 @@ export const HeartIcon = ({
     >
       <path 
         d="M24.3135 5.37827C23.7176 4.7821 23.0101 4.30919 22.2314 3.98653C21.4527 3.66387 20.618 3.4978 19.7751 3.4978C18.9322 3.4978 18.0976 3.66387 17.3189 3.98653C16.5402 4.30919 15.8327 4.7821 15.2368 5.37827L14.0001 6.61493L12.7635 5.37827C11.5598 4.17463 9.92734 3.49843 8.22513 3.49843C6.52293 3.49843 4.89044 4.17463 3.6868 5.37827C2.48316 6.58191 1.80696 8.21439 1.80696 9.9166C1.80696 11.6188 2.48316 13.2513 3.6868 14.4549L4.92347 15.6916L14.0001 24.7683L23.0768 15.6916L24.3135 14.4549C24.9096 13.8591 25.3825 13.1515 25.7052 12.3728C26.0279 11.5941 26.1939 10.7595 26.1939 9.9166C26.1939 9.0737 26.0279 8.23905 25.7052 7.46035C25.3825 6.68165 24.9096 5.97415 24.3135 5.37827V5.37827Z" 
-        stroke={stroke} 
+        stroke={strokeColor} 
         strokeWidth={strokeWidth} 
         strokeLinecap="round" 
         strokeLinejoin="round"
-        fill={filled ? stroke : "none"}
+        fill={filled ? fillColor : "none"}
       />
     </svg>
   );

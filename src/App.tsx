@@ -13,9 +13,8 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="favorites" element={<FavoritesPage />} />
-          <Route path="pokemon/:name" element={<PokemonDetailPage />} />
         </Route>
-        
+        <Route path="pokemon/:name" element={<PokemonDetailPage />} />
       </Routes>
     </div>
   );

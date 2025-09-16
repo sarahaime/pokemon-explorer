@@ -1,57 +1,46 @@
-import { TYPE_COLORS, NEUTRAL_CARD_BG, PokemonTypeName } from '../constants/typeColors';
+import { TYPE_COLORS, NEUTRAL_BG, PokemonTypeName } from '../constants/typeColors';
 import { Pokemon } from '../types/pokemon';
 
-export interface ComputedChipStyle {
+export interface ComputedTypeStyle {
   backgroundColor: string;
-  textColorClass: string;
+  backgroundColorLight: string;
 }
-
-const LIGHT_TEXT_TYPES: PokemonTypeName[] = [
-  'fighting',
-  'poison',
-  'ghost',
-  'dragon',
-  'dark',
-];
 
 export function getPrimaryTypeName(pokemon: Pokemon | undefined): PokemonTypeName | undefined {
   const name = pokemon?.types?.[0]?.type?.name as PokemonTypeName | undefined;
   return name;
 }
 
-export function getTypeStyleByPokemon(pokemon: Pokemon | undefined): ComputedChipStyle {
+export function getTypeStyleByPokemon(pokemon: Pokemon | undefined): ComputedTypeStyle {
   const primary = getPrimaryTypeName(pokemon);
   if (!primary || !(primary in TYPE_COLORS)) {
     return {
-      backgroundColor: NEUTRAL_CARD_BG,
-      textColorClass: 'text-gray-900',
+      backgroundColor: NEUTRAL_BG,
+      backgroundColorLight: 'rgba(243, 244, 246, 0.2)',
     };
   }
 
-  const { bg } = TYPE_COLORS[primary];
-  const useLightText = LIGHT_TEXT_TYPES.includes(primary);
+  const { mainColor: bg, lightColor: opacityColor } = TYPE_COLORS[primary];
 
   return {
     backgroundColor: bg,
-    textColorClass: useLightText ? 'text-white' : 'text-gray-900'
+    backgroundColorLight: opacityColor
   };
 }
 
-
-export function getTypeStyle(pokemonTypeName: PokemonTypeName): ComputedChipStyle {
+export function getTypeStyle(pokemonTypeName: PokemonTypeName): ComputedTypeStyle {
     if (!pokemonTypeName || !(pokemonTypeName in TYPE_COLORS)) {
       return {
-        backgroundColor: NEUTRAL_CARD_BG,
-        textColorClass: 'text-gray-900',
+        backgroundColor: NEUTRAL_BG,
+        backgroundColorLight: 'rgba(243, 244, 246, 0.2)',
       };
     }
   
-    const { bg } = TYPE_COLORS[pokemonTypeName];
-    const useLightText = LIGHT_TEXT_TYPES.includes(pokemonTypeName);
+    const { mainColor: bg, lightColor: opacityColor } = TYPE_COLORS[pokemonTypeName];
   
     return {
       backgroundColor: bg,
-      textColorClass: useLightText ? 'text-white' : 'text-gray-900'
+      backgroundColorLight: opacityColor,
     };
   }
   

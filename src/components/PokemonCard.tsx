@@ -46,7 +46,8 @@ export const PokemonCard = ({ pokemonName, onClick }: PokemonCardProps) => {
           <HeartIcon
             width={24}
             height={24}
-            stroke={isFavorite(pokemon.name) ? '#dc2626' : '#9ca3af'}
+            strokeColor={isFavorite(pokemon.name) ? '#dc2626' : '#9ca3af'}
+            fillColor={isFavorite(pokemon.name) ? '#dc2626' : '#9ca3af'}
             filled={isFavorite(pokemon.name)}
           />
         </button>
@@ -66,7 +67,7 @@ export const PokemonCard = ({ pokemonName, onClick }: PokemonCardProps) => {
             return (
               <span 
                 key={index}
-                className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${typeStyle.textColorClass}`}
+                className={`px-3 py-1 rounded-full text-xs font-medium capitalize text-white`}
                 style={{ backgroundColor: typeStyle.backgroundColor }}
               >
                 {type.type.name}
