@@ -1,11 +1,11 @@
 import { PokemonList } from "../components/PokemonList";
-import { Pokemon } from "../types/pokemon";
+import { PokemonListItem } from "../types/pokemon";
 import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
   const navigate = useNavigate();
   
-  const handlePokemonClick = (pokemon: Pokemon) => {
+  const handlePokemonClick = (pokemon: PokemonListItem) => {
     navigate(`/pokemon/${pokemon.name}`);
   };
 

@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { pokemonApiService } from '../services/pokemonApiService';
 import { PokemonCard } from './PokemonCard';
-import { Pokemon, PokemonListItem } from '../types/pokemon';
+import { PokemonListItem } from '../types/pokemon';
 import { PokemonLoadingCard } from './PokemonLoadingCard';
 import { QUERY_KEYS } from '../constants/queryKeys';
 
 interface PokemonListProps {
-    onPokemonClick: (pokemon: Pokemon) => void;
+    onPokemonClick: (pokemon: PokemonListItem) => void;
 }
 
 export const PokemonList = ({ onPokemonClick }: PokemonListProps) => {
@@ -16,6 +16,7 @@ export const PokemonList = ({ onPokemonClick }: PokemonListProps) => {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
+        isLoading,
         } = useInfiniteQuery({
         queryKey: QUERY_KEYS.POKEMON_LIST,
         queryFn: ({ pageParam = 0 }) => pokemonApiService.getPokemons(pageParam, 20),
@@ -29,8 +30,6 @@ export const PokemonList = ({ onPokemonClick }: PokemonListProps) => {
         initialPageParam: 0,
     });
 
-    console.log(isFetchingNextPage)
-
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
         if (scrollHeight - scrollTop === clientHeight && hasNextPage && !isFetchingNextPage) {
@@ -42,6 +41,18 @@ export const PokemonList = ({ onPokemonClick }: PokemonListProps) => {
         return data?.pages.flatMap(page => page?.results || []) || [];
     }, [data?.pages]);
 
+    if (isLoading) {
+        return (
+            <div className="h-full overflow-y-auto mx-auto md:px-6 lg:px-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+                    {[...Array(8)].map((_, index) => (
+                        <PokemonLoadingCard key={index} />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div
             className="h-full overflow-y-auto mx-auto md:px-6 lg:px-8"
@@ -52,7 +63,7 @@ export const PokemonList = ({ onPokemonClick }: PokemonListProps) => {
                     <PokemonCard
                         key={pokemonItem.name}
                         pokemonName={pokemonItem.name}
-                        onClick={() => onPokemonClick(pokemonItem as any)}
+                        onClick={() => onPokemonClick(pokemonItem)}
                     />
                 ))}
             </div>
